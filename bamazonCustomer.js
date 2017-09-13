@@ -58,8 +58,9 @@ function checkInventory(productId, qauntityRequested) {
 		// console.log(res[0].stock_qauntity);
 
 		if(qauntityRequested > res[0].stock_qauntity) {
-			console.log("Insufficient Quantity! please order a different amount!");
-			showProducts();
+			console.log("Insufficient Quantity!\nOnly "+res[0].stock_qauntity+" left. Please order a different amount!");
+			// showProducts();
+			connection.end();
 
 		}
 		else {
@@ -86,7 +87,7 @@ function completePurchase(id, q, i) {
 
 		
 			console.log("Your total price is: $"+(res[0].price * q));
-
+			// showProducts();
 			connection.end();
 		});
 
