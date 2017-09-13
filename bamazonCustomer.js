@@ -15,13 +15,16 @@ connection.connect(function(err){
 
 });
 
+console.log("\nWelcome to Bamazon!!!!");
+console.log("----------------------\n");
+
 showProducts();
 
-connection.end();
+
 
 function showProducts() {
-	console.log("\nWelcome to Bamazon!!!!");
-	console.log("----------------------\n\nProducts:\n");
+	
+	console.log("\nProducts:\n");
 
 	connection.query('SELECT item_id, product_name, price FROM products', function(err, res){
 		// console.log ("res", res);
@@ -48,7 +51,18 @@ function showProducts() {
 }
 
 function checkInventory(productId, qauntityRequested) {
-	console.log("checkInventory", productId, qauntityRequested);
+	// console.log("checkInventory", productId, qauntityRequested);
+
+	connection.query("SELECT stock_qauntity FROM products WHERE item_id='"+productId+"'", function(err, res){
+		// console.log ("res", res);
+		// console.log(res[0].stock_qauntity);
+		if(qauntityRequested > res[0].stock_qauntity) {
+			console.log("Insufficient Quantity! please order a different amount!");
+			showProducts();
+
+		}
+		connection.end();
+	});
 
 }
 
