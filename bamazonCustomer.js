@@ -56,13 +56,42 @@ function checkInventory(productId, qauntityRequested) {
 	connection.query("SELECT stock_qauntity FROM products WHERE item_id='"+productId+"'", function(err, res){
 		// console.log ("res", res);
 		// console.log(res[0].stock_qauntity);
+
 		if(qauntityRequested > res[0].stock_qauntity) {
 			console.log("Insufficient Quantity! please order a different amount!");
 			showProducts();
 
 		}
-		connection.end();
+		else {
+			completePurchase(productId, qauntityRequested, res[0].stock_qauntity);
+		}
+		
 	});
 
+}
+
+function completePurchase(id, q, i) {
+	// console.log("completePurchase", id, q, i);
+
+	connection.query("UPDATE products SET stock_qauntity="+ (i-q) +" WHERE item_id='"+id+"'", function(err, res){
+		// console.log ("res", res);
+		// console.log(res.affectedRows);
+
+		console.log("Inventory updated to:", i-q);
+
+
+		connection.query("SELECT price FROM products WHERE item_id='"+id+"'", function(err, res){
+			// console.log ("res", res);
+			// console.log(res[0].price);
+
+		
+			console.log("Your total price is: $"+(res[0].price * q));
+
+			connection.end();
+		});
+
+		
+	});
+	
 }
 
